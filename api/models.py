@@ -9,7 +9,7 @@ class Portador(models.Model):
 class DigitalAccount(models.Model):
     portador = models.OneToOneField(
         Portador,
-        related_name='conta_digital',
+        related_name='digital_account',
         on_delete=models.DO_NOTHING
     )
     current_balance = models.FloatField()
