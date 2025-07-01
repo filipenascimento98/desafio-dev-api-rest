@@ -16,6 +16,15 @@ class PortadorSerializer(serializers.Serializer):
 
 
 class DigitalAccountSerializer(serializers.Serializer):
+    portador = serializers.CharField(max_length=11)
+    current_balance = serializers.FloatField(required=False)
+    number = serializers.IntegerField()
+    agency = serializers.IntegerField()
+    active = serializers.BooleanField(required=False)
+    blocked = serializers.BooleanField(required=False)
+
+    
+class DigitalAccountDeserializer(serializers.Serializer):
     portador = PortadorSerializer()
     current_balance = serializers.FloatField(required=False)
     number = serializers.IntegerField()

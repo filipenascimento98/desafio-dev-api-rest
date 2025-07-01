@@ -23,6 +23,15 @@ class DomainBase:
             return {"message": "Objeto não encontrado", "status": 404}
         
         return {"message": ret, "status": 200}
+
+    def filter_by(self, field_values):
+        try:
+            ret = self.repository.filter_by(field_values)
+        except Exception as e:
+            logging.error(e)
+            return {"message": "Objeto não encontrado", "status": 404}
+        
+        return {"message": ret, "status": 200}
     
     def get(self, query_params={}, select_related=[]):
         try:

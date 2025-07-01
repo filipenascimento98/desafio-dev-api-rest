@@ -53,16 +53,16 @@ class RepositoryBase:
         """
         return obj.save(**changed_data)
     
-    def filter_by_created_at(self, date):
+    def filter_by(self, field_values):
         '''
-        Realiza a filtragem dos registros em banco que tem data de criação maiores
-        do que a passada como parâmetro.
+        Realiza a filtragem dos registros em banco com base no parâmetro passado
         Args:
-        - date: Data a ser filtrada
+        - field: Campo a ser usa na busca
+        - value: Valor do campo a ser buscado
         Returns:
-        - Todos os registros que tem o campo created_at com data igual a 'date'.
+        - Todos os registros que tem o campo e valor especificado.
         '''
-        return self.model.objects.filter(created_at=date)
+        return self.model.objects.filter(**field_values)
 
     def delete(self, obj):
         '''

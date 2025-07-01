@@ -15,7 +15,7 @@ class DigitalAccount(models.Model):
     current_balance = models.FloatField(default=0)
     number = models.IntegerField()
     agency = models.IntegerField()
-    active = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
     blocked = models.BooleanField(default=True)
 
     class Meta:

@@ -1,9 +1,9 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from api.domain.digital_account_repository import DigitalAccountDomain
+from api.domain.digital_account_domain import DigitalAccountDomain
 from api.domain.portador_domain import PortadorDomain
-from api.serializer import DigitalAccountSerializer
+from api.serializer import DigitalAccountSerializer, DigitalAccountDeserializer
 
 
 class DigitalAccountView(APIView):
@@ -12,7 +12,7 @@ class DigitalAccountView(APIView):
 
     def get(self, request, cpf):
         result = self.domain.get(query_params={'portador_id':cpf}, select_related=['portador'])
-        serializer = DigitalAccountSerializer(instance=result['message'])
+        serializer = DigitalAccountDeserializer(instance=result['message'])
 
         return Response(data={'data': serializer.data}, status=result['status'])
 
