@@ -7,7 +7,7 @@ class Portador(models.Model):
 
 
 class DigitalAccount(models.Model):
-    portador = models.OneToOneField(
+    portador = models.ForeignKey(
         Portador,
         related_name='digital_account',
         on_delete=models.DO_NOTHING
@@ -17,6 +17,11 @@ class DigitalAccount(models.Model):
     agency = models.IntegerField()
     active = models.BooleanField(default=False)
     blocked = models.BooleanField(default=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['number', 'agency'], name='unique_number_agency')
+        ]
 
 
 class Transaction(models.Model):
