@@ -31,3 +31,10 @@ class DigitalAccountDeserializer(serializers.Serializer):
     agency = serializers.IntegerField()
     active = serializers.BooleanField(required=False)
     blocked = serializers.BooleanField(required=False)
+
+
+class TransactionSerializer(serializers.Serializer):
+    number_account = serializers.IntegerField()
+    agency_account = serializers.IntegerField()
+    value = serializers.FloatField()
+    type = serializers.ChoiceField(choices=(('withdraw', 'Withdraw'), ('deposit', 'Deposit')))

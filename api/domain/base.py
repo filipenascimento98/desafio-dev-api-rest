@@ -42,6 +42,15 @@ class DomainBase:
         
         return {"message": ret, "status": 200}
 
+    def update(self, obj, changed_data={}):
+        try:
+            self.repository.update(obj, changed_data)
+        except Exception as e:
+            logging.error(e)
+            return {"message": "Não foi possível adicionar o objeto a base de dados.", "status": 400}
+        
+        return {"message": obj.pk, "status": 201}
+
     def delete(self, data):
         try:
             self.repository.delete(data)

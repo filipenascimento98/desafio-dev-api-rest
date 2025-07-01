@@ -41,7 +41,7 @@ class RepositoryBase:
         '''
         return self.model.objects.all()
     
-    def update(self, obj, changed_data={}):
+    def update(self, obj, fields):
         """
         Realiza a alteração parcial dos campos de um objeto via ORM.
         Args:
@@ -51,9 +51,10 @@ class RepositoryBase:
         Returns:
         - obj: Objeto alterado.
         """
+        changed_data={'update_fields': fields}
         return obj.save(**changed_data)
     
-    def filter_by(self, field_values):
+    def filter_by(self, field_values={}):
         '''
         Realiza a filtragem dos registros em banco com base no parâmetro passado
         Args:

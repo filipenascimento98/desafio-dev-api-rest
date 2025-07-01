@@ -15,3 +15,27 @@ class Validator:
         second_digit = (sum_result * 10 % 11) % 10
 
         return cpf[-2:] == f"{first_digit}{second_digit}"
+    
+    def validate_account_active_and_unblocked(self, account):
+        if account.active and not account.blocked:
+            return True
+        
+        return False
+
+    def check_enough_balance(self, account, value):
+        if account.current_balance >= value:
+            return True
+        
+        return False
+
+    def check_withdraw_daily_limit(self, transactions, value):
+        withdraw_amount = 0
+
+        for transaction in transactions:
+            withdraw_amount += transaction.value
+        withdraw_amount += value
+
+        if withdraw_amount >= 2000:
+            return False
+        
+        return True

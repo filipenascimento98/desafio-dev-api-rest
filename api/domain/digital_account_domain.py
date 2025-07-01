@@ -25,3 +25,12 @@ class DigitalAccountDomain(DomainBase):
             return {"message": "Não foi possível adicionar o objeto a base de dados.", "status": 400}
         
         return {"message": ret.pk, "status": 201}
+    
+    def update_current_balance(self, number, agency, new_balance):
+        filters = {
+            'number': number,
+            'agency': agency
+        }
+        account = self.get(query_params=filters)
+        account.balance = new_balance
+        self.update(account, changed_data=['current_balance'])
