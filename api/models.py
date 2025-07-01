@@ -12,10 +12,10 @@ class DigitalAccount(models.Model):
         related_name='digital_account',
         on_delete=models.DO_NOTHING
     )
-    current_balance = models.FloatField()
+    current_balance = models.FloatField(default=0)
     number = models.IntegerField()
     agency = models.IntegerField()
-    active = models.BooleanField(default=True)
+    active = models.BooleanField(default=False)
     blocked = models.BooleanField(default=True)
 
 

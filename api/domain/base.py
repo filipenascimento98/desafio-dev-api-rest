@@ -24,9 +24,9 @@ class DomainBase:
         
         return {"message": ret, "status": 200}
     
-    def get(self, query_params={}):
+    def get(self, query_params={}, select_related=[]):
         try:
-            ret = self.repository.get(query_params=query_params)
+            ret = self.repository.get(query_params=query_params, select_related=select_related)
         except Exception as e:
             logging.error(e)
             return {"message": "Objeto não encontrado", "status": 404}

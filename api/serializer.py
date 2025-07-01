@@ -13,3 +13,12 @@ class PortadorSerializer(serializers.Serializer):
             raise serializers.ValidationError('Invalid CPF')
         
         return value
+
+
+class DigitalAccountSerializer(serializers.Serializer):
+    portador = PortadorSerializer()
+    current_balance = serializers.FloatField(required=False)
+    number = serializers.IntegerField()
+    agency = serializers.IntegerField()
+    active = serializers.BooleanField(required=False)
+    blocked = serializers.BooleanField(required=False)
