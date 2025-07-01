@@ -32,3 +32,12 @@ class DomainBase:
             return {"message": "Objeto não encontrado", "status": 404}
         
         return {"message": ret, "status": 200}
+
+    def delete(self, data):
+        try:
+            self.repository.delete(data)
+        except Exception as e:
+            logging.error(e)
+            return {"message": "A exclusão falhou", "status": 400}
+
+        return {"message": "", "status": 204}

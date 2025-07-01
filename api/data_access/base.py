@@ -63,3 +63,11 @@ class RepositoryBase:
         - Todos os registros que tem o campo created_at com data igual a 'date'.
         '''
         return self.model.objects.filter(created_at=date)
+
+    def delete(self, obj):
+        '''
+        Realiza a exclusão de um objeto do banco de dados.
+        Args:
+        - obj: Instância do objeto a ser deletado.
+        '''
+        obj.delete()
