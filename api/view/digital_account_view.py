@@ -12,8 +12,10 @@ from api.serializer import (
 
 
 class DigitalAccountView(APIView):
-    domain = DigitalAccountDomain()
-    domain_portador = PortadorDomain()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.domain = DigitalAccountDomain()
+        self.domain_portador = PortadorDomain()
 
     def get(self, request, cpf):
         result = self.domain.get(query_params={'portador_id':cpf}, select_related=['portador'])
@@ -41,7 +43,9 @@ class DigitalAccountView(APIView):
 
 
 class DeactivateAccountView(APIView):
-    domain = DigitalAccountDomain()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.domain = DigitalAccountDomain()
 
     def post(self, request):
         serializer = DeactivateAccountSerializer(data=request.data)
@@ -63,7 +67,9 @@ class DeactivateAccountView(APIView):
     
 
 class BlockUnblockAccountView(APIView):
-    domain = DigitalAccountDomain()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.domain = DigitalAccountDomain()
 
     def post(self, request):
         serializer = BlockUnblockAccountSerializer(data=request.data)
