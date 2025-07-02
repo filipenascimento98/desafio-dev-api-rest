@@ -23,6 +23,22 @@ class TestAccountViewTests(APITestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.data, {'data': {'number': 1, 'agency': 123}})
 
+    @patch('api.view.account_view.AccountDomain')
+    def test_get_account_not_found(self, mock_domain_cls):
+        mock_domain = mock_domain_cls.return_value
+        mock_account = MagicMock()
+        mock_domain.get.return_value = {'message': 'Objeto não encontrado', 'status': 404}
+
+        with patch('api.view.account_view.AccountDeserializer') as mock_serializer_cls:
+            mock_serializer = mock_serializer_cls.return_value
+            mock_serializer.data = {'number': 1, 'agency': 123}
+
+            url = reverse('get-account', args=[12345678900])
+            response = self.client.get(url)
+
+            self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.data, {'data': 'Objeto não encontrado'})
+
     @patch('api.view.account_view.PortadorDomain')
     @patch('api.view.account_view.AccountDomain')
     def test_post_success(self, mock_account_cls, mock_portador_cls):

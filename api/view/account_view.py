@@ -27,6 +27,8 @@ class AccountView(APIView):
     @swagger_auto_schema(manual_parameters=[path_param])
     def get(self, request, document):
         result = self.domain.get(query_params={'portador_id':document}, select_related=['portador'])
+        if result['status'] == status.HTTP_404_NOT_FOUND:
+            return Response(data={'data': result['message']}, status=result['status'])
         serializer = AccountDeserializer(instance=result['message'])
 
         return Response(data={'data': serializer.data}, status=result['status'])
