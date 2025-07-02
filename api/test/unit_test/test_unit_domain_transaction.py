@@ -77,7 +77,7 @@ class TestTransactionDomain(unittest.TestCase):
         response = self.domain.register_transaction(self.account, 150, 'deposit')
 
         self.domain.create.assert_called_with({
-            'digital_account': self.account,
+            'account': self.account,
             'value': 150,
             'transaction_type': 'deposit'
         })

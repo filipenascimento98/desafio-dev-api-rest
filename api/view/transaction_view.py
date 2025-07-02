@@ -31,29 +31,38 @@ class TransactionView(APIView):
 
         return Response(data={'message': result['message']}, status=result['status'])
 
-    query_params = [
+class ExtractView(APIView):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.domain = TransactionDomain()
+        self.account_domain = AccountDomain()
+    params = [
         openapi.Parameter(
             'number_account', openapi.IN_QUERY,
             description="Número da conta",
-            type=openapi.TYPE_STRING
+            type=openapi.TYPE_STRING,
+            required=True
         ),
         openapi.Parameter(
             'agency_account', openapi.IN_QUERY,
             description="Agência da conta",
-            type=openapi.TYPE_STRING
+            type=openapi.TYPE_STRING,
+            required=True
         ),
         openapi.Parameter(
             'month', openapi.IN_QUERY,
             description="Mês de consulta do extrato",
-            type=openapi.TYPE_STRING
+            type=openapi.TYPE_STRING,
+            required=True
         ),
         openapi.Parameter(
             'year', openapi.IN_QUERY,
             description="Ano de consulta do extrato",
-            type=openapi.TYPE_STRING
+            type=openapi.TYPE_STRING,
+            required=True
         )
     ]
-    @swagger_auto_schema(query_serializer=TransactionSerializer())
+    @swagger_auto_schema(manual_parameters=params)
     def get(self, request):
         serializer = AccountStatementSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
