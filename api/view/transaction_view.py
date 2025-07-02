@@ -7,8 +7,10 @@ from api.serializer import TransactionSerializer, AccountStatementSerializer, Ac
 
 
 class TransactionView(APIView):
-    domain = TransactionDomain()
-    digital_account_domain = DigitalAccountDomain()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.domain = TransactionDomain()
+        self.digital_account_domain = DigitalAccountDomain()
 
     def post(self, request):
         serializer = TransactionSerializer(data=request.data)

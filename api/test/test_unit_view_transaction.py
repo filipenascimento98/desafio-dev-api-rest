@@ -1,13 +1,10 @@
 from unittest.mock import patch, MagicMock
-from rest_framework.test import APITestCase, APIClient
+from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
-from api.view.portador_view import PortadorView
 
 
 class TestPortadorView(APITestCase):
-    def setUp(self):
-        self.client = APIClient()
 
     @patch('api.view.portador_view.PortadorDomain')
     @patch('api.view.portador_view.PortadorSerializer')
@@ -18,7 +15,7 @@ class TestPortadorView(APITestCase):
         mock_serializer = mock_serializer_cls.return_value
         mock_serializer.is_valid.return_value = True
         mock_serializer.data = {
-            'full_name': 'Maria Oliveira',
+            'full_name': 'Filipe Nascimento',
             'cpf': '12345678901'
         }
 
@@ -28,7 +25,7 @@ class TestPortadorView(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data, {'data': 1})
         mock_domain.create.assert_called_once_with(mock_serializer.data)
-    
+
     @patch('api.view.portador_view.PortadorDomain')
     def test_delete_success(self, mock_domain_cls):
         mock_domain = mock_domain_cls.return_value
