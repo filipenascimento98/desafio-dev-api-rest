@@ -1,5 +1,5 @@
 import re
-
+from datetime import datetime
 
 class Validator:
     def validate_cpf(self, cpf):
@@ -38,4 +38,16 @@ class Validator:
         if withdraw_amount >= 2000:
             return False
         
+        return True
+    
+    def validate_month(self, month):
+        if month <= 0 or month >= 13:
+            return False
+
+        return True
+
+    def validate_year(self, year):
+        if year <= 0 or year > datetime.now().year:
+            return False
+
         return True

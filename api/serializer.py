@@ -38,3 +38,31 @@ class TransactionSerializer(serializers.Serializer):
     agency_account = serializers.IntegerField()
     value = serializers.FloatField()
     type = serializers.ChoiceField(choices=(('withdraw', 'Withdraw'), ('deposit', 'Deposit')))
+
+
+class AccountStatementSerializer(serializers.Serializer):
+    number_account = serializers.IntegerField()
+    agency_account = serializers.IntegerField()
+    month = serializers.IntegerField()
+    year = serializers.IntegerField()
+
+    def validate_month(self, value):
+        validator = Validator()
+
+        if not validator.validate_month(value):
+            raise serializers.ValidationError('Mês inválido')
+        
+        return value
+    
+    def validate_year(self, value):
+        validator = Validator()
+
+        if not validator.validate_year(value):
+            raise serializers.ValidationError('Ano inválido')
+
+        return value
+
+class AccountStatementDeserializer(serializers.Serializer):
+    created_at = serializers.DateField()
+    value = serializers.FloatField()
+    transaction_type = serializers.CharField()

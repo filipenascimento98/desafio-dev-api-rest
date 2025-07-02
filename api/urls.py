@@ -5,6 +5,7 @@ from api.view.transaction_view import TransactionView
 
 
 urlpatterns = [
+    path('extract/', TransactionView.as_view(), name='transacation'),
     path('transacation/', TransactionView.as_view(), name='transacation'),
     path('digital-account/', DigitalAccountView.as_view(), name='create-digital-account'),
     path('digital-account/<int:cpf>/', DigitalAccountView.as_view(), name='get-digital-account'),
