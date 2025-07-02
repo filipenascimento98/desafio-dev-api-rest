@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from api.domain.portador_domain import PortadorDomain
@@ -16,6 +17,10 @@ class PortadorView(APIView):
         serializer = PortadorSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        result_get = self.domain.get({'document': serializer.data['document']})
+        if result_get['status'] == status.HTTP_200_OK:
+            return Response(data={'data': 'Já há uma conta cadastrada com esses dados'}, status=result_get['status'])
+        
         result = self.domain.create(serializer.data)
 
         return Response(data={'data': result['message']}, status=result['status'])
@@ -30,7 +35,7 @@ class PortadorView(APIView):
         result_get = self.domain.get(query_params={'document':document})
 
         if result_get['status'] == 404:
-            return Response(data=result_get['message'], status=result_get['status'])
+            return Response(data={'data': result_get['message']}, status=result_get['status'])
 
         portador_obj = result_get['message']
         result = self.domain.delete(portador_obj)

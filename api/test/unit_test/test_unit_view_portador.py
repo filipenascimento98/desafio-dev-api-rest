@@ -51,7 +51,7 @@ class TestPortadorView(APITestCase):
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.data, 'Portador não encontrado')
+        self.assertEqual(response.data, {'data': 'Portador não encontrado'})
         mock_domain.get.assert_called_once_with(query_params={'document': 12345678901})
 
     @patch('api.view.portador_view.PortadorDomain')
