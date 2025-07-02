@@ -31,6 +31,7 @@ class AccountView(APIView):
 
         return Response(data={'data': serializer.data}, status=result['status'])
 
+    @swagger_auto_schema(query_serializer=AccountSerializer())
     def post(self, request):
         serializer = AccountSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -55,6 +56,7 @@ class DeactivateAccountView(APIView):
         super().__init__(**kwargs)
         self.domain = AccountDomain()
 
+    @swagger_auto_schema(query_serializer=DeactivateAccountSerializer())
     def post(self, request):
         serializer = DeactivateAccountSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -79,6 +81,7 @@ class BlockUnblockAccountView(APIView):
         super().__init__(**kwargs)
         self.domain = AccountDomain()
 
+    @swagger_auto_schema(query_serializer=BlockUnblockAccountSerializer())
     def post(self, request):
         serializer = BlockUnblockAccountSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
