@@ -84,7 +84,7 @@ class TestAccountDomain(unittest.TestCase):
 
         self.assertTrue(account.blocked)
         self.domain.repository.update.assert_called_with(account, ['blocked'])
-        self.assertEqual(response, {"message": '', "status": 201})
+        self.assertEqual(response, {"message": 'Conta bloqueada', "status": 201})
 
     def test_block_unblock_account_exception(self):
         account = MagicMock()

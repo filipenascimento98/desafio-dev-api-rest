@@ -71,10 +71,13 @@ class ExtractView(APIView):
             'number': serializer.data['number_account'], 
             'agency': serializer.data['agency_account']
         }
-        account = self.account_domain.get(query_params=query_params)
-
+        result = self.account_domain.get(query_params=query_params)
+        if result['status'] == status.HTTP_404_NOT_FOUND:
+            return Response(data={'data': result['message']}, status=result['status'])
+        
+        account = result['message']
         query_params = {
-            'account_id': account['message'].id,
+            'account_id': account.id,
             'created_at__month': serializer.data['month'],
             'created_at__year': serializer.data['year'],
         }

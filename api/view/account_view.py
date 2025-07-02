@@ -70,7 +70,7 @@ class DeactivateAccountView(APIView):
         result = self.domain.get(query_params=query_params)
 
         if result['status'] == status.HTTP_404_NOT_FOUND:
-            return Response(data=result['message'], status=result['status'])
+            return Response(data={'data': result['message']}, status=result['status'])
         
         account = result['message']
         result = self.domain.deactivate_account(account)

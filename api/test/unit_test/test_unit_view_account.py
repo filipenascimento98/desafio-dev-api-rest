@@ -1,6 +1,7 @@
 from unittest.mock import patch, MagicMock
 from rest_framework.test import APITestCase, APIClient
 from django.urls import reverse
+from api.domain.account_domain import AccountDomain
 
 
 class TestAccountViewTests(APITestCase):
@@ -119,46 +120,39 @@ class TestDeactivateAccountView(APITestCase):
             response = self.client.post(url, data=data, format='json')
 
             self.assertEqual(response.status_code, 404)
-            self.assertEqual(response.data, 'Conta não encontrada')
+            self.assertEqual(response.data, {'data': 'Conta não encontrada'})
 
 
 class TestBlockUnblockAccountView(APITestCase):
     def setUp(self):
-        self.client = APIClient()
+        self.domain = AccountDomain()
+        self.domain.repository = MagicMock()
 
-    @patch('api.view.account_view.AccountDomain')
-    def test_block_unblock_account_success(self, mock_domain_cls):
-        domain = mock_domain_cls.return_value
-        domain.get.return_value = {'message': MagicMock(), 'status': 200}
-        domain.block_unblock_account.return_value = {'message': '', 'status': 201}
+    def test_block_active_account(self):
+        account = MagicMock(active=True, blocked=False)
+        self.domain.repository.update.return_value = account
 
-        data = {'number': 1, 'agency': 123, 'block': True}
+        result = self.domain.block_unblock_account(account, block=True)
 
-        with patch('api.view.account_view.BlockUnblockAccountSerializer') as mock_serializer_cls:
-            mock_serializer = mock_serializer_cls.return_value
-            mock_serializer.is_valid.return_value = True
-            mock_serializer.data = data
+        self.assertEqual(result['status'], 201)
+        self.assertEqual(result['message'], 'Conta bloqueada')
+        self.domain.repository.update.assert_called_once_with(account, ['blocked'])
 
-            url = reverse('block-unblock-account')
-            response = self.client.post(url, data=data, format='json')
+    def test_unblock_active_account(self):
+        account = MagicMock(active=True, blocked=True)
+        self.domain.repository.update.return_value = account
 
-            self.assertEqual(response.status_code, 201)
-            self.assertEqual(response.data, {'data': ''})
+        result = self.domain.block_unblock_account(account, block=False)
 
-    @patch('api.view.account_view.AccountDomain')
-    def test_block_unblock_account_not_found(self, mock_domain_cls):
-        domain = mock_domain_cls.return_value
-        domain.get.return_value = {'message': 'Conta não encontrada', 'status': 404}
+        self.assertEqual(result['status'], 201)
+        self.assertEqual(result['message'], 'Conta desbloqueada')
+        self.domain.repository.update.assert_called_once_with(account, ['blocked'])
 
-        data = {'number': 1, 'agency': 123, 'block': False}
+    def test_block_inactive_account(self):
+        account = MagicMock(active=False)
 
-        with patch('api.view.account_view.BlockUnblockAccountSerializer') as mock_serializer_cls:
-            mock_serializer = mock_serializer_cls.return_value
-            mock_serializer.is_valid.return_value = True
-            mock_serializer.data = data
+        result = self.domain.block_unblock_account(account, block=True)
 
-            url = reverse('block-unblock-account')
-            response = self.client.post(url, data=data, format='json')
-
-            self.assertEqual(response.status_code, 404)
-            self.assertEqual(response.data, 'Conta não encontrada')
+        self.assertEqual(result['status'], 400)
+        self.assertEqual(result['message'], 'Não é possível bloquear/desbloquear uma conta desativada')
+        self.domain.repository.update.assert_not_called()
