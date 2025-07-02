@@ -5,7 +5,9 @@ from api.serializer import PortadorSerializer
 
 
 class PortadorView(APIView):
-    domain = PortadorDomain()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.domain = PortadorDomain()
 
     def post(self, request):
         serializer = PortadorSerializer(data=request.data)
