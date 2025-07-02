@@ -52,7 +52,7 @@ class RepositoryBase:
         - obj: Objeto alterado.
         """
         changed_data={'update_fields': fields}
-        return obj.save(**changed_data)
+        obj.save(**changed_data)
     
     def filter_by(self, field_values={}):
         '''

@@ -66,3 +66,8 @@ class AccountStatementDeserializer(serializers.Serializer):
     created_at = serializers.DateField()
     value = serializers.FloatField()
     transaction_type = serializers.CharField()
+
+
+class DeactivateAccountSerializer(serializers.Serializer):
+    number = serializers.IntegerField()
+    agency = serializers.IntegerField()

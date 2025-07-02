@@ -26,11 +26,14 @@ class DigitalAccountDomain(DomainBase):
         
         return {"message": ret.pk, "status": 201}
     
-    def update_current_balance(self, number, agency, new_balance):
-        filters = {
-            'number': number,
-            'agency': agency
-        }
-        account = self.get(query_params=filters)
-        account.balance = new_balance
-        self.update(account, changed_data=['current_balance'])
+    def deactivate_account(self, account):
+        try:
+            if not account.active:
+                return {"message": "Conta desativada", "status": 400}
+            account.active = False
+            account = self.repository.update(account, ['active'])
+        except Exception as e:
+            logging.error(e)
+            return {"message": "Não foi desativar a conta", "status": 400}
+
+        return {"message": '', "status": 201}
