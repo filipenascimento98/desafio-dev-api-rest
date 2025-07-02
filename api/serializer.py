@@ -39,6 +39,13 @@ class TransactionSerializer(serializers.Serializer):
     value = serializers.FloatField()
     type = serializers.ChoiceField(choices=(('withdraw', 'Withdraw'), ('deposit', 'Deposit')))
 
+    def validate_value(self, value):
+        validator = Validator()
+
+        if not validator.validate_positive_values(value):
+            raise serializers.ValidationError('O valor deve ser positivo maior que zero')
+
+        return value
 
 class AccountStatementSerializer(serializers.Serializer):
     number_account = serializers.IntegerField()

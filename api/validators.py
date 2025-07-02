@@ -51,3 +51,9 @@ class Validator:
             return False
 
         return True
+
+    def validate_positive_values(self, value):
+        if value <= 0:
+            return False
+
+        return True
