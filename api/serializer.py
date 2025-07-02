@@ -4,9 +4,9 @@ from api.validators import Validator
 
 class PortadorSerializer(serializers.Serializer):
     full_name = serializers.CharField(max_length=100)
-    cpf = serializers.CharField(max_length=11)
+    document = serializers.CharField(max_length=11)
 
-    def validate_cpf(self, value):
+    def validate_document(self, value):
         validator = Validator()
         
         if not validator.validate_cpf(value):
@@ -15,7 +15,7 @@ class PortadorSerializer(serializers.Serializer):
         return value
 
 
-class DigitalAccountSerializer(serializers.Serializer):
+class AccountSerializer(serializers.Serializer):
     portador = serializers.CharField(max_length=11)
     current_balance = serializers.FloatField(required=False)
     number = serializers.IntegerField()
@@ -24,7 +24,7 @@ class DigitalAccountSerializer(serializers.Serializer):
     blocked = serializers.BooleanField(required=False)
 
     
-class DigitalAccountDeserializer(serializers.Serializer):
+class AccountDeserializer(serializers.Serializer):
     portador = PortadorSerializer()
     current_balance = serializers.FloatField(required=False)
     number = serializers.IntegerField()

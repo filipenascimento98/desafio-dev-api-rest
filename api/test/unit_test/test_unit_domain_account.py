@@ -1,11 +1,11 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from api.domain.digital_account_domain import DigitalAccountDomain
+from api.domain.account_domain import AccountDomain
 
 
-class TestDigitalAccountDomain(unittest.TestCase):
+class TestAccountDomain(unittest.TestCase):
     def setUp(self):
-        self.domain = DigitalAccountDomain()
+        self.domain = AccountDomain()
         self.domain.repository = MagicMock()
         self.domain.filter_by = MagicMock() 
     
@@ -39,7 +39,7 @@ class TestDigitalAccountDomain(unittest.TestCase):
         self.domain.filter_by.return_value = {"message": mock_queryset}
         self.domain.repository.create.side_effect = Exception("erro")
 
-        with patch('api.domain.digital_account_domain.logging') as mock_log:
+        with patch('api.domain.account_domain.logging') as mock_log:
             response = self.domain.create({'portador': 123})
             mock_log.error.assert_called_once()
 
@@ -70,7 +70,7 @@ class TestDigitalAccountDomain(unittest.TestCase):
         account = MagicMock(active=True)
         self.domain.repository.update.side_effect = Exception("erro")
 
-        with patch('api.domain.digital_account_domain.logging') as mock_log:
+        with patch('api.domain.account_domain.logging') as mock_log:
             response = self.domain.deactivate_account(account)
             mock_log.error.assert_called_once()
 
@@ -90,7 +90,7 @@ class TestDigitalAccountDomain(unittest.TestCase):
         account = MagicMock()
         self.domain.repository.update.side_effect = Exception("erro")
 
-        with patch('api.domain.digital_account_domain.logging') as mock_log:
+        with patch('api.domain.account_domain.logging') as mock_log:
             response = self.domain.block_unblock_account(account, True)
             mock_log.error.assert_called_once()
 

@@ -1,7 +1,6 @@
 from datetime import datetime
 from api.domain.base import DomainBase
 from api.data_access.transaction_repository import TransactionRepository
-from api.data_access.digital_account_repository import DigitalAccountRepository
 from api.validators import Validator
 
 
@@ -20,7 +19,7 @@ class TransactionDomain(DomainBase):
             filter = {
                 'created_at': datetime.now().date(),
                 'transaction_type': 'withdraw',
-                'digital_account_id': account.id
+                'account_id': account.id
             }
 
             result = self.filter_by(filter)
@@ -39,7 +38,7 @@ class TransactionDomain(DomainBase):
 
     def register_transaction(self, account, value, type):
         obj = {
-            'digital_account': account,
+            'account': account,
             'value': value,
             'transaction_type': type
         }

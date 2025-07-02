@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from api.domain.transacation_domain import TransactionDomain
-from api.domain.digital_account_domain import DigitalAccountDomain
+from api.domain.account_domain import AccountDomain
 from api.serializer import TransactionSerializer, AccountStatementSerializer, AccountStatementDeserializer
 
 
@@ -10,7 +10,7 @@ class TransactionView(APIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.domain = TransactionDomain()
-        self.digital_account_domain = DigitalAccountDomain()
+        self.account_domain = AccountDomain()
 
     def post(self, request):
         serializer = TransactionSerializer(data=request.data)
@@ -20,11 +20,11 @@ class TransactionView(APIView):
             'number':serializer.data['number_account'], 
             'agency':serializer.data['agency_account']
         }
-        digital_account = self.digital_account_domain.get(query_params=query_params)
-        if digital_account['status'] == status.HTTP_404_NOT_FOUND:
+        account = self.account_domain.get(query_params=query_params)
+        if account['status'] == status.HTTP_404_NOT_FOUND:
             return Response(data={'message': 'Conta não encontrada.'}, status=status.HTTP_404_NOT_FOUND)
 
-        result = self.domain.execute_transaction(digital_account['message'], serializer.data['value'], serializer.data['type'])
+        result = self.domain.execute_transaction(account['message'], serializer.data['value'], serializer.data['type'])
 
         return Response(data={'message': result['message']}, status=result['status'])
 
@@ -36,10 +36,10 @@ class TransactionView(APIView):
             'number': serializer.data['number_account'], 
             'agency': serializer.data['agency_account']
         }
-        digital_account = self.digital_account_domain.get(query_params=query_params)
+        account = self.account_domain.get(query_params=query_params)
 
         query_params = {
-            'digital_account_id': digital_account['message'].id,
+            'account_id': account['message'].id,
             'created_at__month': serializer.data['month'],
             'created_at__year': serializer.data['year'],
         }

@@ -1,33 +1,33 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from api.domain.digital_account_domain import DigitalAccountDomain
+from api.domain.account_domain import AccountDomain
 from api.domain.portador_domain import PortadorDomain
 from api.serializer import (
-    DigitalAccountSerializer, 
-    DigitalAccountDeserializer, 
+    AccountSerializer, 
+    AccountDeserializer, 
     DeactivateAccountSerializer, 
     BlockUnblockAccountSerializer
 )
 
 
-class DigitalAccountView(APIView):
+class AccountView(APIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.domain = DigitalAccountDomain()
+        self.domain = AccountDomain()
         self.domain_portador = PortadorDomain()
 
-    def get(self, request, cpf):
-        result = self.domain.get(query_params={'portador_id':cpf}, select_related=['portador'])
-        serializer = DigitalAccountDeserializer(instance=result['message'])
+    def get(self, request, document):
+        result = self.domain.get(query_params={'portador_id':document}, select_related=['portador'])
+        serializer = AccountDeserializer(instance=result['message'])
 
         return Response(data={'data': serializer.data}, status=result['status'])
 
     def post(self, request):
-        serializer = DigitalAccountSerializer(data=request.data)
+        serializer = AccountSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        result_portador = self.domain_portador.get(query_params={'cpf':serializer.data['portador']})
+        result_portador = self.domain_portador.get(query_params={'document':serializer.data['portador']})
         if result_portador['status'] == status.HTTP_404_NOT_FOUND:
             return Response(data=result_portador['message'], status=result_portador['status'])
         
@@ -45,7 +45,7 @@ class DigitalAccountView(APIView):
 class DeactivateAccountView(APIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.domain = DigitalAccountDomain()
+        self.domain = AccountDomain()
 
     def post(self, request):
         serializer = DeactivateAccountSerializer(data=request.data)
@@ -69,7 +69,7 @@ class DeactivateAccountView(APIView):
 class BlockUnblockAccountView(APIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.domain = DigitalAccountDomain()
+        self.domain = AccountDomain()
 
     def post(self, request):
         serializer = BlockUnblockAccountSerializer(data=request.data)

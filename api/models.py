@@ -3,13 +3,13 @@ from django.db import models
 
 class Portador(models.Model):
     full_name = models.CharField(max_length=100)
-    cpf = models.CharField(max_length=11, primary_key=True)
+    document = models.CharField(max_length=11, primary_key=True)
 
 
-class DigitalAccount(models.Model):
+class Account(models.Model):
     portador = models.ForeignKey(
         Portador,
-        related_name='digital_account',
+        related_name='account',
         on_delete=models.DO_NOTHING
     )
     current_balance = models.FloatField(default=0)
@@ -25,8 +25,8 @@ class DigitalAccount(models.Model):
 
 
 class Transaction(models.Model):
-    digital_account = models.ForeignKey(
-        DigitalAccount,
+    account = models.ForeignKey(
+        Account,
         related_name='transaction',
         on_delete=models.DO_NOTHING
     )

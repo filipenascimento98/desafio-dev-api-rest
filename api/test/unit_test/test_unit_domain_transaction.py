@@ -1,6 +1,5 @@
 import unittest
-from unittest.mock import MagicMock, patch
-from datetime import datetime, date
+from unittest.mock import MagicMock
 from api.domain.transacation_domain import TransactionDomain
 
 class TestTransactionDomain(unittest.TestCase):

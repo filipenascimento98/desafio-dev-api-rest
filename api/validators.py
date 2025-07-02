@@ -35,7 +35,7 @@ class Validator:
             withdraw_amount += transaction.value
         withdraw_amount += value
 
-        if withdraw_amount >= 2000:
+        if withdraw_amount > 2000:
             return False
         
         return True

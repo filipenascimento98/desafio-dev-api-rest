@@ -1,11 +1,11 @@
 import logging
 from api.domain.base import DomainBase
-from api.data_access.digital_account_repository import DigitalAccountRepository
+from api.data_access.account_repository import AccountRepository
 
 
-class DigitalAccountDomain(DomainBase):
+class AccountDomain(DomainBase):
     def __init__(self):
-        super().__init__(DigitalAccountRepository())
+        super().__init__(AccountRepository())
     
     def create(self, data):
         filter = {

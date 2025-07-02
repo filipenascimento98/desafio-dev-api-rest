@@ -1,6 +1,5 @@
 from unittest.mock import patch, MagicMock
 from rest_framework.test import APITestCase
-from rest_framework import status
 from django.urls import reverse
 
 
@@ -16,7 +15,7 @@ class TestPortadorView(APITestCase):
         mock_serializer.is_valid.return_value = True
         mock_serializer.data = {
             'full_name': 'Filipe Nascimento',
-            'cpf': '12345678901'
+            'document': '12345678901'
         }
 
         url = reverse('create-portador')
@@ -38,7 +37,7 @@ class TestPortadorView(APITestCase):
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(response.data, {'data': ''})
-        mock_domain.get.assert_called_once_with(query_params={'cpf': 12345678901})
+        mock_domain.get.assert_called_once_with(query_params={'document': 12345678901})
         mock_domain.delete.assert_called_once_with(mock_portador)
 
     @patch('api.view.portador_view.PortadorDomain')
@@ -51,7 +50,7 @@ class TestPortadorView(APITestCase):
 
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.data, 'Portador não encontrado')
-        mock_domain.get.assert_called_once_with(query_params={'cpf': 12345678901})
+        mock_domain.get.assert_called_once_with(query_params={'document': 12345678901})
 
     @patch('api.view.portador_view.PortadorDomain')
     def test_delete_failed_to_delete(self, mock_domain_cls):
@@ -65,5 +64,5 @@ class TestPortadorView(APITestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data, 'Erro ao deletar')
-        mock_domain.get.assert_called_once_with(query_params={'cpf': 12345678901})
+        mock_domain.get.assert_called_once_with(query_params={'document': 12345678901})
         mock_domain.delete.assert_called_once_with(mock_portador)

@@ -17,8 +17,8 @@ class PortadorView(APIView):
 
         return Response(data={'data': result['message']}, status=result['status'])
 
-    def delete(self, request, cpf):
-        result_get = self.domain.get(query_params={'cpf':cpf})
+    def delete(self, request, document):
+        result_get = self.domain.get(query_params={'document':document})
 
         if result_get['status'] == 404:
             return Response(data=result_get['message'], status=result_get['status'])
