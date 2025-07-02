@@ -1,6 +1,8 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from api.domain.account_domain import AccountDomain
 from api.domain.portador_domain import PortadorDomain
 from api.serializer import (
@@ -17,6 +19,12 @@ class AccountView(APIView):
         self.domain = AccountDomain()
         self.domain_portador = PortadorDomain()
 
+    path_param = openapi.Parameter(
+        'document', openapi.IN_PATH,
+        description="CPF do usuário",
+        type=openapi.TYPE_STRING
+    )
+    @swagger_auto_schema(manual_parameters=[path_param])
     def get(self, request, document):
         result = self.domain.get(query_params={'portador_id':document}, select_related=['portador'])
         serializer = AccountDeserializer(instance=result['message'])
