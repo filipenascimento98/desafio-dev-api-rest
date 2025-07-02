@@ -1,6 +1,8 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from api.domain.transacation_domain import TransactionDomain
 from api.domain.account_domain import AccountDomain
 from api.serializer import TransactionSerializer, AccountStatementSerializer, AccountStatementDeserializer
@@ -12,6 +14,7 @@ class TransactionView(APIView):
         self.domain = TransactionDomain()
         self.account_domain = AccountDomain()
 
+    @swagger_auto_schema(query_serializer=TransactionSerializer())
     def post(self, request):
         serializer = TransactionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -28,6 +31,29 @@ class TransactionView(APIView):
 
         return Response(data={'message': result['message']}, status=result['status'])
 
+    query_params = [
+        openapi.Parameter(
+            'number_account', openapi.IN_QUERY,
+            description="Número da conta",
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'agency_account', openapi.IN_QUERY,
+            description="Agência da conta",
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'month', openapi.IN_QUERY,
+            description="Mês de consulta do extrato",
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'year', openapi.IN_QUERY,
+            description="Ano de consulta do extrato",
+            type=openapi.TYPE_STRING
+        )
+    ]
+    @swagger_auto_schema(query_serializer=TransactionSerializer())
     def get(self, request):
         serializer = AccountStatementSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
