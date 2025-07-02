@@ -3,7 +3,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from api.domain.digital_account_domain import DigitalAccountDomain
 from api.domain.portador_domain import PortadorDomain
-from api.serializer import DigitalAccountSerializer, DigitalAccountDeserializer, DeactivateAccountSerializer
+from api.serializer import (
+    DigitalAccountSerializer, 
+    DigitalAccountDeserializer, 
+    DeactivateAccountSerializer, 
+    BlockUnblockAccountSerializer
+)
 
 
 class DigitalAccountView(APIView):
@@ -53,5 +58,27 @@ class DeactivateAccountView(APIView):
         
         account = result['message']
         result = self.domain.deactivate_account(account)
+
+        return Response(data={'data': result['message']}, status=result['status'])
+    
+
+class BlockUnblockAccountView(APIView):
+    domain = DigitalAccountDomain()
+
+    def post(self, request):
+        serializer = BlockUnblockAccountSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        query_params = {
+            'number': serializer.data['number'],
+            'agency': serializer.data['agency']
+        }
+        result = self.domain.get(query_params=query_params)
+
+        if result['status'] == status.HTTP_404_NOT_FOUND:
+            return Response(data=result['message'], status=result['status'])
+
+        account = result['message']
+        result = self.domain.block_unblock_account(account, serializer.data['block'])
 
         return Response(data={'data': result['message']}, status=result['status'])

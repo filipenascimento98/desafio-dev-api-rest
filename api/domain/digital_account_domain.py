@@ -37,3 +37,13 @@ class DigitalAccountDomain(DomainBase):
             return {"message": "Não foi desativar a conta", "status": 400}
 
         return {"message": '', "status": 201}
+
+    def block_unblock_account(self, account, block):
+        try:
+            account.blocked = block
+            account = self.repository.update(account, ['blocked'])
+        except Exception as e:
+            logging.error(e)
+            return {"message": "Não foi bloquear/desbloquear a conta", "status": 400}
+
+        return {"message": '', "status": 201}

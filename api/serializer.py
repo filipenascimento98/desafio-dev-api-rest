@@ -71,3 +71,9 @@ class AccountStatementDeserializer(serializers.Serializer):
 class DeactivateAccountSerializer(serializers.Serializer):
     number = serializers.IntegerField()
     agency = serializers.IntegerField()
+
+
+class BlockUnblockAccountSerializer(serializers.Serializer):
+    number = serializers.IntegerField()
+    agency = serializers.IntegerField()
+    block = serializers.BooleanField()
